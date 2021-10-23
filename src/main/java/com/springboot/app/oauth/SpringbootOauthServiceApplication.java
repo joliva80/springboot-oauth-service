@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 
@@ -26,10 +24,6 @@ public class SpringbootOauthServiceApplication
 		Authorization -> Basic Auth -> username + password (plain text) will create a Authorization header basic base 64
 		Body x-www-form-urlencoded  ->  username + password (plain text) + grant_type = password
 	*/
-	@Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootOauthServiceApplication.class, args);
