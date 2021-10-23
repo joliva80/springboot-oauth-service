@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserService implements IUserService, UserDetailsService{
+public class UserService implements UserDetailsService{
 
     private Logger log = Logger.getLogger(UserService.class.getName());
 
@@ -44,9 +44,7 @@ public class UserService implements IUserService, UserDetailsService{
                                                                         authorities);
     }
 
-    @Override
-	public User findByUsername(String username) {
-		return userFeignClient.findByUsername(username);
-	}
+  
+    
     
 }
