@@ -19,6 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class}) // Exclude auto DB configuration, we only need jpa beans, no Database connection
 public class SpringbootOauthServiceApplication
 {
+	/* 
+		https://bcrypt-generator.com to store user passwords encrypted
+		jwt.io to check the access_token is valid
+		post http://localhost:8090/api-oauth/oauth/token
+		Authorization -> Basic Auth -> username + password (plain text) will create a Authorization header basic base 64
+		Body x-www-form-urlencoded  ->  username + password (plain text) + grant_type = password
+	*/
 	@Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
