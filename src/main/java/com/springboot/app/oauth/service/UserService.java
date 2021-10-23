@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService, UserServiceInterface {
 
     private Logger log = Logger.getLogger(UserService.class.getName());
 
@@ -42,6 +42,11 @@ public class UserService implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User(  user.getUsername(), 
                                                                         user.getPassword(), 
                                                                         authorities);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userFeignClient.findByUsername(username);
     }
 
   
