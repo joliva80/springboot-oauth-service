@@ -16,18 +16,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     private UserDetailsService userService;
 
-    @Autowired
-    public BCryptPasswordEncoder passwordEncoder(){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder;
-    }
+    //@Bean
+    //@Autowired // should be 
+    //public BCryptPasswordEncoder passwordEncoder(){
+    //    return new BCryptPasswordEncoder();
+    //}
+    
+    @Autowired 
+    private BCryptPasswordEncoder passwordEncoder;
     
     @Override
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth.userDetailsService(this.userService)
-            .passwordEncoder(passwordEncoder());
+            .passwordEncoder(passwordEncoder);
+            //.passwordEncoder(passwordEncoder());
     }
 
     @Override

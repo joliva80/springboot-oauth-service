@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -18,6 +19,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServiceConfig extends AuthorizationServerConfigurerAdapter
 {
+    @Autowired 
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -50,14 +53,15 @@ public class AuthorizationServiceConfig extends AuthorizationServerConfigurerAda
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception 
     {
         clients.inMemory().withClient("frontend_app") // Here the client Id we would like to register, an angular app, react, ios...
-                          .secret("1234")
+                          //.secret("1234")
+                          .secret(passwordEncoder.encode("1234"))
                           .scopes("read", "write")
                           .authorizedGrantTypes("password", "refresh_token") // password -> the users does exist in our system (username + pass)
                           .accessTokenValiditySeconds(3600) // 1 hour
                           .refreshTokenValiditySeconds(3600) // 1 hour
                           .and()
                           .withClient("android_app") // Here the client Id we would like to register, an angular app, react, ios...
-                          .secret("12345")
+                          .secret("1234")
                           .scopes("read", "write")
                           .authorizedGrantTypes("password", "refresh_token") // password -> the users does exist in our system (username + pass)
                           .accessTokenValiditySeconds(3600) // 1 hour
