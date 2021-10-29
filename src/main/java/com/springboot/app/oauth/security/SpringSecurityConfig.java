@@ -7,12 +7,16 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 
 
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter
 {
+    @Autowired
+    private AuthenticationEventPublisher eventPublisher;
+
     @Autowired
     private UserDetailsService userService;
     
@@ -24,7 +28,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth.userDetailsService(this.userService)
-            .passwordEncoder(passwordEncoder);
+            .passwordEncoder(passwordEncoder)
+            .and()
+            .authenticationEventPublisher(eventPublisher);
     }
 
     @Override
