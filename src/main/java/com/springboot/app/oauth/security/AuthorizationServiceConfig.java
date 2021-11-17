@@ -1,6 +1,7 @@
 package com.springboot.app.oauth.security;
 
 import java.util.Arrays;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -60,7 +61,7 @@ public class AuthorizationServiceConfig extends AuthorizationServerConfigurerAda
 
         // Secret code to encode the JWT tokens, will be needed to decrypt later on also.
         //tokenConverter.setSigningKey("1234");
-        tokenConverter.setSigningKey(env.getProperty("config.security.oauth.jwt.key"));
+        tokenConverter.setSigningKey(Base64.getEncoder().encodeToString( env.getProperty("config.security.oauth.jwt.key").getBytes())); // We will decode base64 into gateway security authorizationmanagerjwt.class
         
         return tokenConverter;
     }

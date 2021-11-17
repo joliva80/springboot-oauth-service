@@ -15,8 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import feign.FeignException;
-import feign.FeignException.FeignClientException;
+import brave.Tracer;
 
 
 @Service
@@ -27,6 +26,8 @@ public class UserService implements UserDetailsService, UserServiceInterface {
     @Autowired
     private UserFeignClientInterface userFeignClient;
 
+    @Autowired
+    private Tracer tracer;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -45,10 +46,13 @@ public class UserService implements UserDetailsService, UserServiceInterface {
                                                                         true, true, true,
                                                                         authorities);
         }
-        catch (FeignException e){
+        catch (Exception e){
             // Change error http 404 for a Bad Credentials error 400.
-            log.info("Login error, username '"+username+"' does not exist.");
-            throw new UsernameNotFoundException("Login error, username '"+username+"' does not exist.");
+            String errorMsg = "Login error, username '"+username+"' does not exist.";
+            log.info(errorMsg);
+            tracer.currentSpan().tag("error.message", errorMsg + e.getMessage());
+
+            throw new UsernameNotFoundException(errorMsg);
         }
     }
 
